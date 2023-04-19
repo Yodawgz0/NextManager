@@ -1,5 +1,7 @@
 import React from "react";
 import { Button, Form, Input } from "antd";
+import Link from "next/link";
+import { FormOutlined, LockOutlined, UserOutlined } from "@ant-design/icons";
 
 export default function RegisterPage() {
   const onFinish = (values: any) => {
@@ -25,15 +27,13 @@ export default function RegisterPage() {
           labelCol={{ span: 8 }}
           wrapperCol={{ span: 16 }}
           initialValues={{ remember: true }}
-          style={{ maxWidth: 600 }}
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
           autoComplete="on"
-          className="p-14 border-solid border-2 ms-11 border-red-500 rounded-2xl text-cyan-50"
+          className="p-14 border-solid border-2 ms-11 border-red-500 rounded-2xl text-cyan-50 bg-gray-300"
         >
           <Form.Item
             name={["user", "email"]}
-            label="Email"
             rules={[
               {
                 type: "email",
@@ -42,36 +42,50 @@ export default function RegisterPage() {
               },
             ]}
           >
-            <Input />
+            <Input
+              className="w-64"
+              prefix={<UserOutlined className="site-form-item-icon" />}
+              placeholder="Email"
+            />
           </Form.Item>
-          <Form.Item
-            name={["user", "firstname"]}
-            label="First Name"
-            rules={[{ required: true }]}
-          >
-            <Input />
+          <Form.Item name={["user", "firstname"]} rules={[{ required: true }]}>
+            <Input
+              className="w-64"
+              prefix={<FormOutlined className="site-form-item-icon" />}
+              placeholder="First Name"
+            />
           </Form.Item>
-          <Form.Item
-            name={["user", "lastname"]}
-            label="Last Name"
-            rules={[{ required: true }]}
-          >
-            <Input />
+          <Form.Item name={["user", "lastname"]} rules={[{ required: true }]}>
+            <Input
+              className="w-64"
+              prefix={<FormOutlined className="site-form-item-icon" />}
+              placeholder="Last Name"
+            />
           </Form.Item>
 
           <Form.Item
-            label="Password"
             name="password"
             rules={[{ required: true, message: "Please input your password!" }]}
           >
-            <Input.Password />
+            <Input
+              className="w-64"
+              prefix={<LockOutlined className="site-form-item-icon" />}
+              type="password"
+              placeholder="Password"
+            />
           </Form.Item>
 
           <Form.Item className="flex items-center justify-around">
-            <Button htmlType="submit" className="px-10">
+            <Button htmlType="submit" className="px-10 bg-amber-950 text-white">
               Register
             </Button>
           </Form.Item>
+          <Link
+            className=" flex justify-around text-rose-700"
+            href="/LoginPage"
+          >
+            Already have an account? Login
+          </Link>
         </Form>
       </div>
     </>

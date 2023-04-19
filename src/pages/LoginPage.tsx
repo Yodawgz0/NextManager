@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, Form, Input } from "antd";
 import Link from "next/link";
+import { LockOutlined, UserOutlined } from "@ant-design/icons";
 
 export default function LoginPage() {
   const onFinish = (values: any) => {
@@ -29,31 +30,49 @@ export default function LoginPage() {
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
           autoComplete="on"
-          className="p-14 border-solid border-2 ms-11 border-red-500 rounded-2xl text-cyan-50"
+          className="p-14 border-solid border-2 ms-11 border-red-500 rounded-2xl text-cyan-50 bg-gray-00"
         >
           <Form.Item
-            label="Username"
             name="username"
+            className=" flex justify-around"
             rules={[{ required: true, message: "Please input your username!" }]}
           >
-            <Input />
+            <Input
+              className="w-64"
+              prefix={<UserOutlined className="site-form-item-icon" />}
+              placeholder="Username"
+            />
           </Form.Item>
 
           <Form.Item
-            label="Password"
             name="password"
+            className=" flex  justify-around"
             rules={[{ required: true, message: "Please input your password!" }]}
           >
-            <Input.Password />
+            <Input
+              className="w-64"
+              prefix={<LockOutlined className="site-form-item-icon" />}
+              type="password"
+              placeholder="Password"
+            />
           </Form.Item>
 
-          <Form.Item className="flex items-center justify-around">
+          <Form.Item className="w-44 flex items-center flex-col mx-10 justify-around">
             <Link href="/Dashboard">
-              <Button htmlType="submit" className="px-10">
+              <Button
+                htmlType="submit"
+                className="px-10 bg-amber-950 text-white"
+              >
                 Login
               </Button>
             </Link>
           </Form.Item>
+          <Link
+            className=" flex justify-around text-rose-700"
+            href="/RegisterPage"
+          >
+            Don't have an account? Register
+          </Link>
         </Form>
       </div>
     </>
