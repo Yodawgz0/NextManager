@@ -2,18 +2,20 @@ import React from "react";
 import { Button, Form, Input } from "antd";
 import Link from "next/link";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
+import axios from "axios";
 
 export default function LoginPage() {
   const onFinish = (values: any) => {
-    fetch("http://localhost:8000/login", {
-      method: "POST",
-      headers: {
-        Accept: "application.json",
-        "Content-Type": "application/json",
-      },
-      body: values,
-    });
-    console.log("Success:", values);
+    axios
+      .post("http://localhost:8000/login", {
+        values,
+      })
+      .then(function (response) {
+        console.log(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -33,14 +35,14 @@ export default function LoginPage() {
           className="p-14 border-solid border-2 ms-11 border-red-500 rounded-2xl text-cyan-50 bg-gray-00"
         >
           <Form.Item
-            name="username"
+            name="email"
             className=" flex justify-around"
-            rules={[{ required: true, message: "Please input your username!" }]}
+            rules={[{ required: true, message: "Please input your Email!" }]}
           >
             <Input
               className="w-64"
               prefix={<UserOutlined className="site-form-item-icon" />}
-              placeholder="Username"
+              placeholder="Email"
             />
           </Form.Item>
 
@@ -52,20 +54,24 @@ export default function LoginPage() {
             <Input
               className="w-64"
               prefix={<LockOutlined className="site-form-item-icon" />}
+              minLength={8}
               type="password"
               placeholder="Password"
             />
           </Form.Item>
 
           <Form.Item className="w-44 flex items-center flex-col mx-10 justify-around">
-            <Link href="/Dashboard">
+            {/* <Link href="/Dashboard">
               <Button
                 htmlType="submit"
                 className="px-10 bg-amber-950 text-white"
               >
                 Login
               </Button>
-            </Link>
+            </Link> */}
+            <Button htmlType="submit" className="px-10 bg-amber-950 text-white">
+              Login
+            </Button>
           </Form.Item>
           <Link
             className=" flex justify-around text-rose-700"

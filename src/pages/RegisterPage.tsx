@@ -2,18 +2,30 @@ import React from "react";
 import { Button, Form, Input } from "antd";
 import Link from "next/link";
 import { FormOutlined, LockOutlined, UserOutlined } from "@ant-design/icons";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 export default function RegisterPage() {
+  const router = useRouter();
   const onFinish = (values: any) => {
-    fetch("http://localhost:8000/signup", {
-      method: "POST",
-      headers: {
-        Accept: "application.json",
-        "Content-Type": "application/json",
-      },
-      body: values,
-    });
-    console.log("Success:", values);
+    const userDetails = {
+      email: values.user.email,
+      firstname: values.user.firstname,
+      lastname: values.user.lastname,
+      password: values.password,
+    };
+    axios
+      .post("http://localhost:8000/register", {
+        userDetails,
+      })
+      .then(function (response) {
+        console.log(response);
+        router.push("/LoginPage");
+      })
+      .catch(function (error) {
+        alert(error);
+        console.log(error);
+      });
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -65,10 +77,14 @@ export default function RegisterPage() {
 
           <Form.Item
             name="password"
-            rules={[{ required: true, message: "Please input your password!" }]}
+            rules={[
+              { required: true, message: "Password is Required!" },
+              { min: 8, message: "Password must be minimum 8 characters." },
+            ]}
           >
             <Input
               className="w-64"
+              minLength={8}
               prefix={<LockOutlined className="site-form-item-icon" />}
               type="password"
               placeholder="Password"
