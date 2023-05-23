@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Form, Input, InputNumber } from "antd";
 import { Col, Row } from "antd";
 import { FormOutlined, NumberOutlined, UserOutlined } from "@ant-design/icons";
 import { Table, Divider } from "antd";
 import type { ColumnsType } from "antd/es/table";
+import axios from "axios";
 
 const layout = {
   labelCol: { span: 8 },
@@ -36,56 +37,37 @@ interface DataType {
 }
 
 export default function Dashboard() {
+  const [alertText, setAlertText] = useState<string>("");
   const onFinish = (values: any) => {
     console.log(values);
+    const userDetails = {
+      GAME_ID: values.GameID,
+      SHOT_NUMBER: values.ShotNo,
+      PERIOD: values.Period,
+      SHOT_RESULT: values.ShotResult,
+      CLOSEST_DEFENDER: values.ClosestDefender,
+      PTS: values.PTS,
+      player_name: values.PlayerName,
+    };
+    console.log(userDetails);
+    // axios
+    //   .post("http://localhost:8000/playerData", {
+    //     userDetails,
+    //   })
+    //   .then(function (response) {
+    //     console.log(response.data);
+    //     if (response.data.message === "Login Successful") {
+    //       setAlertText("User Added SuccessFully")
+    //     }
+    //   })
+    //   .catch(function (error) {
+    //     if (error.response.data.message === "User Not Found") {
+    //       setAlertText("User Not Found");
+    //     } else if (error.response.data.message === "Wrong Password") setAlertText("Wrong Password");
+    //   });
   };
 
-  const data: DataType[] = [
-    {
-      GAME_ID: 21400899,
-      SHOT_NUMBER: 1,
-      PERIOD: 1,
-      SHOT_DIST: 7.7,
-      PTS_TYPE: 2,
-      SHOT_RESULT: "made",
-      CLOSEST_DEFENDER: "Anderson, Alan",
-      PTS: 2,
-      player_name: "brian roberts",
-    },
-    {
-      GAME_ID: 21400899,
-      SHOT_NUMBER: 2,
-      PERIOD: 1,
-      SHOT_DIST: 28.2,
-      PTS_TYPE: 3,
-      SHOT_RESULT: "missed",
-      CLOSEST_DEFENDER: "Bogdanovic, Bojan",
-      PTS: 0,
-      player_name: "brian roberts",
-    },
-    {
-      GAME_ID: 21400899,
-      SHOT_NUMBER: 3,
-      PERIOD: 1,
-      SHOT_DIST: 10.1,
-      PTS_TYPE: 2,
-      SHOT_RESULT: "missed",
-      CLOSEST_DEFENDER: "Bogdanovic, Bojan",
-      PTS: 0,
-      player_name: "brian roberts",
-    },
-    {
-      GAME_ID: 21400899,
-      SHOT_NUMBER: 4,
-      PERIOD: 2,
-      SHOT_DIST: 17.2,
-      PTS_TYPE: 2,
-      SHOT_RESULT: "missed",
-      CLOSEST_DEFENDER: "Brown, Markel",
-      PTS: 0,
-      player_name: "brian roberts",
-    },
-  ];
+  const data: DataType[] = [];
   const columns: ColumnsType<DataType> = [
     {
       title: "Player Name",
@@ -100,16 +82,8 @@ export default function Dashboard() {
       dataIndex: "PERIOD",
     },
     {
-      title: "Shot Distance",
-      dataIndex: "SHOT_DIST",
-    },
-    {
       title: "Shot Result",
       dataIndex: "SHOT_RESULT",
-    },
-    {
-      title: "PTS Type",
-      dataIndex: "PTS_TYPE",
     },
     {
       title: "PTS",
@@ -151,7 +125,7 @@ export default function Dashboard() {
             <Col span={24}>
               {" "}
               <Form.Item
-                name="Player Name"
+                name="PlayerName"
                 rules={[
                   { required: true, message: "Please input Player Name!" },
                 ]}
@@ -167,7 +141,7 @@ export default function Dashboard() {
           <Row>
             <Col span={12}>
               <Form.Item
-                name={["ID"]}
+                name={["GameID"]}
                 rules={[{ required: true, type: "number", min: 0 }]}
               >
                 <InputNumber
@@ -179,7 +153,7 @@ export default function Dashboard() {
             </Col>
             <Col span={12}>
               <Form.Item
-                name={["Shot No."]}
+                name={["ShotNo"]}
                 className="mx-3"
                 rules={[{ required: true, type: "number" }]}
               >
@@ -223,7 +197,7 @@ export default function Dashboard() {
             <Col span={24}>
               {" "}
               <Form.Item
-                name={["Closest Defender"]}
+                name={["ClosestDefender"]}
                 rules={[{ required: true }]}
               >
                 <Input
@@ -237,7 +211,7 @@ export default function Dashboard() {
           <Row>
             <Col span={12}>
               {" "}
-              <Form.Item name={["Points"]} rules={[{ required: true }]}>
+              <Form.Item name={["ShotResult"]} rules={[{ required: true }]}>
                 <Input
                   style={{ width: "133%" }}
                   prefix={<FormOutlined className="site-form-item-icon" />}
