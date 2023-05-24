@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Alert, Button, Form, Input, InputNumber } from "antd";
 import { Col, Row } from "antd";
 import { FormOutlined, NumberOutlined, UserOutlined } from "@ant-design/icons";
@@ -35,6 +35,8 @@ interface DataType {
 
 export default function Dashboard() {
   const [alertText, setAlertText] = useState<string>("");
+  const [playerData, setPlayerData] = useState<DataType[]>([]);
+
   const onFinish = (values: any) => {
     console.log(values);
     const userDetails = {
@@ -58,12 +60,10 @@ export default function Dashboard() {
         setAlertText(error.data.message);
       });
   };
-
-  const data: DataType[] = [];
   const columns: ColumnsType<DataType> = [
     {
       title: "Player Name",
-      dataIndex: "player_name",
+      dataIndex: "PLAYER_NAME",
     },
     {
       title: "Shot Number",
@@ -96,6 +96,17 @@ export default function Dashboard() {
       </>
     );
   };
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:8000/AllPlayerData")
+      .then((data) => {
+        setPlayerData(data.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   return (
     <>
@@ -220,7 +231,7 @@ export default function Dashboard() {
       <Table
         className="p-11 bg-amber-100"
         columns={columns}
-        dataSource={data}
+        dataSource={playerData}
         size="small"
       />
     </>
