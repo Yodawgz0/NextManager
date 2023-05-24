@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Form, Input, InputNumber } from "antd";
+import { Alert, Button, Form, Input, InputNumber } from "antd";
 import { Col, Row } from "antd";
 import { FormOutlined, NumberOutlined, UserOutlined } from "@ant-design/icons";
 import { Table, Divider } from "antd";
@@ -28,11 +28,8 @@ interface DataType {
   GAME_ID: number;
   SHOT_NUMBER: number;
   PERIOD: number;
-  SHOT_DIST: number;
-  PTS_TYPE: number;
   SHOT_RESULT: string;
   CLOSEST_DEFENDER: string;
-  PTS: number;
   player_name: string;
 }
 
@@ -47,24 +44,19 @@ export default function Dashboard() {
       SHOT_RESULT: values.ShotResult,
       CLOSEST_DEFENDER: values.ClosestDefender,
       PTS: values.PTS,
-      player_name: values.PlayerName,
+      PLAYER_NAME: values.PlayerName,
     };
     console.log(userDetails);
-    // axios
-    //   .post("http://localhost:8000/playerData", {
-    //     userDetails,
-    //   })
-    //   .then(function (response) {
-    //     console.log(response.data);
-    //     if (response.data.message === "Login Successful") {
-    //       setAlertText("User Added SuccessFully")
-    //     }
-    //   })
-    //   .catch(function (error) {
-    //     if (error.response.data.message === "User Not Found") {
-    //       setAlertText("User Not Found");
-    //     } else if (error.response.data.message === "Wrong Password") setAlertText("Wrong Password");
-    //   });
+    axios
+      .post("http://localhost:8000/playerData", {
+        userDetails,
+      })
+      .then(function (response) {
+        setAlertText(response.data.message);
+      })
+      .catch(function (error) {
+        setAlertText(error.data.message);
+      });
   };
 
   const data: DataType[] = [];
@@ -84,10 +76,6 @@ export default function Dashboard() {
     {
       title: "Shot Result",
       dataIndex: "SHOT_RESULT",
-    },
-    {
-      title: "PTS",
-      dataIndex: "PTS",
     },
     {
       title: "Closest Defender",
@@ -111,6 +99,20 @@ export default function Dashboard() {
 
   return (
     <>
+      {alertText.length ? (
+        <div className="z-10 fixed p-7 ml-24">
+          <Alert
+            description={alertText}
+            type="info"
+            showIcon
+            closable
+            afterClose={() => setAlertText("")}
+          />
+        </div>
+      ) : (
+        <></>
+      )}
+
       <div className="bg-slate-950 h-screen flex items-center justify-center">
         {" "}
         <Form
@@ -180,15 +182,11 @@ export default function Dashboard() {
             </Col>
             <Col span={12}>
               {" "}
-              <Form.Item
-                name={["PTS"]}
-                className="mx-3"
-                rules={[{ type: "number", required: true }]}
-              >
-                <InputNumber
+              <Form.Item name={["ShotResult"]} rules={[{ required: true }]}>
+                <Input
                   style={{ width: "133%" }}
-                  prefix={<NumberOutlined className="site-form-item-icon" />}
-                  placeholder="PTS Type"
+                  prefix={<FormOutlined className="site-form-item-icon" />}
+                  placeholder="Shot Result"
                 />
               </Form.Item>
             </Col>
@@ -204,31 +202,6 @@ export default function Dashboard() {
                   style={{ width: "140%" }}
                   prefix={<FormOutlined className="site-form-item-icon" />}
                   placeholder="Closest Defender"
-                />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={12}>
-              {" "}
-              <Form.Item name={["ShotResult"]} rules={[{ required: true }]}>
-                <Input
-                  style={{ width: "133%" }}
-                  prefix={<FormOutlined className="site-form-item-icon" />}
-                  placeholder="Shot Result"
-                />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              {" "}
-              <Form.Item
-                name={["Points"]}
-                rules={[{ required: true, type: "number" }]}
-              >
-                <InputNumber
-                  prefix={<NumberOutlined className="site-form-item-icon" />}
-                  className="w-64 mx-3"
-                  placeholder="Points"
                 />
               </Form.Item>
             </Col>
