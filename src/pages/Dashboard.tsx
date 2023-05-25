@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Alert, Button, Form, Input, InputNumber } from "antd";
 import { Col, Row } from "antd";
 import { FormOutlined, NumberOutlined, UserOutlined } from "@ant-design/icons";
-import { Table, Divider } from "antd";
+import { Table, Spin } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import axios from "axios";
 
@@ -30,15 +30,16 @@ interface DataType {
   PERIOD: number;
   SHOT_RESULT: string;
   CLOSEST_DEFENDER: string;
-  player_name: string;
+  PLAYER_NAME: string;
 }
 
 export default function Dashboard() {
   const [alertText, setAlertText] = useState<string>("");
   const [playerData, setPlayerData] = useState<DataType[]>([]);
+  const [deletingSpinner, setDeletingSpinner] = useState<boolean>(false);
 
+  const [form] = Form.useForm();
   const onFinish = (values: any) => {
-    console.log(values);
     const userDetails = {
       GAME_ID: values.GameID,
       SHOT_NUMBER: values.ShotNo,
@@ -48,17 +49,19 @@ export default function Dashboard() {
       PTS: values.PTS,
       PLAYER_NAME: values.PlayerName,
     };
-    console.log(userDetails);
     axios
       .post("http://localhost:8000/playerData", {
         userDetails,
       })
       .then(function (response) {
         setAlertText(response.data.message);
+
+        getPlayerData();
       })
       .catch(function (error) {
         setAlertText(error.data.message);
       });
+    form.resetFields();
   };
   const columns: ColumnsType<DataType> = [
     {
@@ -84,20 +87,44 @@ export default function Dashboard() {
     {
       title: "Actions",
       key: "operation",
-      render: () => renderActions(),
+      render: (_, record) => renderActions(record),
     },
   ];
+  const deletePlayerData = (record: DataType) => {
+    setDeletingSpinner(true);
+    axios
+      .delete(
+        `http://localhost:8000/deletePlayerData/${record.CLOSEST_DEFENDER}&${record.PLAYER_NAME}`
+      )
+      .then(function (response) {
+        setAlertText(response.data.message);
+        getPlayerData();
+      })
+      .catch(function (error) {
+        setAlertText(error.data.message);
+      });
 
-  const renderActions = () => {
+    setDeletingSpinner(false);
+  };
+  const renderActions = (record: DataType) => {
     return (
       <>
         <a className="text-blue-500">Edit</a>
-        <a className="mx-3 text-red-600">Delete</a>
+        {deletingSpinner ? (
+          <Spin size="small" />
+        ) : (
+          <a
+            onClick={() => deletePlayerData(record)}
+            className="mx-3 text-red-600"
+          >
+            Delete
+          </a>
+        )}
       </>
     );
   };
 
-  useEffect(() => {
+  const getPlayerData = () => {
     axios
       .get("http://localhost:8000/AllPlayerData")
       .then((data) => {
@@ -106,6 +133,10 @@ export default function Dashboard() {
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  useEffect(() => {
+    getPlayerData();
   }, []);
 
   return (
@@ -128,6 +159,7 @@ export default function Dashboard() {
         {" "}
         <Form
           {...layout}
+          form={form}
           name="nest-messages"
           onFinish={onFinish}
           style={{ maxWidth: 700 }}
@@ -167,7 +199,6 @@ export default function Dashboard() {
             <Col span={12}>
               <Form.Item
                 name={["ShotNo"]}
-                className="mx-3"
                 rules={[{ required: true, type: "number" }]}
               >
                 <InputNumber
