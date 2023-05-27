@@ -5,6 +5,8 @@ import { FormOutlined, NumberOutlined, UserOutlined } from "@ant-design/icons";
 import { Table, Spin } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import axios from "axios";
+import EditTable from "@/components/EditTable";
+import { ObjectId } from "bson";
 
 const layout = {
   labelCol: { span: 8 },
@@ -24,7 +26,8 @@ const validateMessages = {
 };
 /* eslint-enable no-template-curly-in-string */
 
-interface DataType {
+export interface DataType {
+  _id?: ObjectId;
   GAME_ID: number;
   SHOT_NUMBER: number;
   PERIOD: number;
@@ -37,6 +40,15 @@ export default function Dashboard() {
   const [alertText, setAlertText] = useState<string>("");
   const [playerData, setPlayerData] = useState<DataType[]>([]);
   const [deletingSpinner, setDeletingSpinner] = useState<boolean>(false);
+  const [editPlayerModal, setEditPlayerModal] = useState<boolean>(false);
+  const [dataPlayerEdit, setDataPlayerEdit] = useState<DataType>({
+    GAME_ID: 0,
+    SHOT_NUMBER: 0,
+    SHOT_RESULT: "",
+    PLAYER_NAME: "",
+    CLOSEST_DEFENDER: "",
+    PERIOD: 0,
+  });
 
   const [form] = Form.useForm();
   const onFinish = (values: any) => {
@@ -94,7 +106,7 @@ export default function Dashboard() {
     setDeletingSpinner(true);
     axios
       .delete(
-        `http://localhost:8000/deletePlayerData/${record.CLOSEST_DEFENDER}&${record.PLAYER_NAME}`
+        `http://localhost:8000/deletePlayerData/${record.CLOSEST_DEFENDER}&${record.PLAYER_NAME}&${record._id}`
       )
       .then(function (response) {
         setAlertText(response.data.message);
@@ -109,7 +121,15 @@ export default function Dashboard() {
   const renderActions = (record: DataType) => {
     return (
       <>
-        <a className="text-blue-500">Edit</a>
+        <a
+          onClick={() => {
+            setEditPlayerModal(true);
+            setDataPlayerEdit(record);
+          }}
+          className="text-blue-500"
+        >
+          Edit
+        </a>
         {deletingSpinner ? (
           <Spin size="small" />
         ) : (
@@ -154,7 +174,15 @@ export default function Dashboard() {
       ) : (
         <></>
       )}
-
+      {editPlayerModal ? (
+        <EditTable
+          openModal={editPlayerModal}
+          setopenModal={setEditPlayerModal}
+          dataPlayerEdit={dataPlayerEdit}
+        />
+      ) : (
+        <></>
+      )}
       <div className="bg-slate-950 h-screen flex items-center justify-center">
         {" "}
         <Form
