@@ -1,29 +1,58 @@
 import React, { useEffect, useState } from "react";
-import {
-  Button,
-  Col,
-  Form,
-  Input,
-  InputNumber,
-  Modal,
-  Row,
-  Typography,
-} from "antd";
+import { Button, Col, Form, Input, Modal, Row, Typography } from "antd";
 import { Dispatch, SetStateAction } from "react";
 import { DataType } from "@/pages/Dashboard";
 import { FormOutlined, NumberOutlined, UserOutlined } from "@ant-design/icons";
+import axios from "axios";
 
 interface modalprops {
   openModal: boolean;
   setopenModal: Dispatch<SetStateAction<boolean>>;
   dataPlayerEdit: DataType;
+  setAlertText: Dispatch<SetStateAction<string>>;
 }
 
-const EditTable = ({ openModal, setopenModal, dataPlayerEdit }: modalprops) => {
+const EditTable = ({
+  openModal,
+  setopenModal,
+  dataPlayerEdit,
+  setAlertText,
+}: modalprops) => {
   const [showError, setShowError] = useState<boolean>(false);
 
   const handleSavePlayerData = () => {
     if (Object.values(playerDataEditedValues).every((v) => v || v === 0)) {
+      if (
+        Object.keys(dataPlayerEdit).filter(
+          //@ts-ignore
+          (e: string) => playerDataEditedValues[e] !== dataPlayerEdit[e]
+        ).length
+      ) {
+        let userDetails = {};
+        Object.keys(dataPlayerEdit)
+          .filter(
+            //@ts-ignore
+            (e: string) => playerDataEditedValues[e] !== dataPlayerEdit[e]
+          )
+          .forEach((element) => {
+            userDetails = {
+              ...userDetails,
+              //@ts-ignore
+              [element]: playerDataEditedValues[element],
+            };
+          });
+        axios
+          .patch(`http://localhost:8000/editPlayer/${dataPlayerEdit._id}`, {
+            userDetails,
+          })
+          .then(function (response) {
+            setAlertText(response.data.message);
+          })
+          .catch(function (err) {
+            console.log(err);
+            setAlertText("Something Went Wrong");
+          });
+      }
       setopenModal(false);
     } else {
       setShowError(true);

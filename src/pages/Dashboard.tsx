@@ -145,6 +145,7 @@ export default function Dashboard() {
   };
 
   const getPlayerData = () => {
+    console.log(9);
     axios
       .get("http://localhost:8000/AllPlayerData")
       .then((data) => {
@@ -157,7 +158,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     getPlayerData();
-  }, []);
+  }, [editPlayerModal]);
 
   return (
     <>
@@ -179,6 +180,7 @@ export default function Dashboard() {
           openModal={editPlayerModal}
           setopenModal={setEditPlayerModal}
           dataPlayerEdit={dataPlayerEdit}
+          setAlertText={setAlertText}
         />
       ) : (
         <></>
