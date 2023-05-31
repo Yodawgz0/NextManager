@@ -41,6 +41,7 @@ export default function Dashboard() {
   const [playerData, setPlayerData] = useState<DataType[]>([]);
   const [deletingSpinner, setDeletingSpinner] = useState<boolean>(false);
   const [editPlayerModal, setEditPlayerModal] = useState<boolean>(false);
+  const [tableLoading, setTableLoading] = useState<boolean>(false);
   const [dataPlayerEdit, setDataPlayerEdit] = useState<DataType>({
     GAME_ID: 0,
     SHOT_NUMBER: 0,
@@ -67,7 +68,6 @@ export default function Dashboard() {
       })
       .then(function (response) {
         setAlertText(response.data.message);
-
         getPlayerData();
       })
       .catch(function (error) {
@@ -145,11 +145,12 @@ export default function Dashboard() {
   };
 
   const getPlayerData = () => {
-    console.log(9);
+    setTableLoading(true);
     axios
       .get("http://localhost:8000/AllPlayerData")
       .then((data) => {
         setPlayerData(data.data.data);
+        setTableLoading(false);
       })
       .catch((err) => {
         setAlertText("Server Problem , Please retry in a while!");
@@ -290,6 +291,7 @@ export default function Dashboard() {
         </Form>
       </div>
       <Table
+        loading={tableLoading}
         className="p-11 bg-amber-100"
         columns={columns}
         dataSource={playerData}
