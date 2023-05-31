@@ -151,7 +151,7 @@ export default function Dashboard() {
         setPlayerData(data.data.data);
       })
       .catch((err) => {
-        console.log(err);
+        setAlertText("Server Problem , Please retry in a while!");
       });
   };
 
