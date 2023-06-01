@@ -20,6 +20,7 @@ export default function LoginPage() {
       .then(function (response) {
         console.log(response.data);
         if (response.data.message === "Login Successful") {
+          localStorage.setItem("userSession", response.data.token);
           router.push("/Dashboard");
         }
       })
