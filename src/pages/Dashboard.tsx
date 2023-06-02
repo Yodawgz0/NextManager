@@ -8,6 +8,8 @@ import axios from "axios";
 import EditTable from "@/components/EditTable";
 import { ObjectId } from "bson";
 
+axios.defaults.withCredentials = true;
+
 const layout = {
   labelCol: { span: 8 },
   wrapperCol: { span: 16 },

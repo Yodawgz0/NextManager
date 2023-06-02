@@ -18,9 +18,8 @@ export default function LoginPage() {
         userDetails,
       })
       .then(function (response) {
-        console.log(response.data);
+        console.log(response);
         if (response.data.message === "Login Successful") {
-          localStorage.setItem("userSession", response.data.token);
           router.push("/Dashboard");
         }
       })
