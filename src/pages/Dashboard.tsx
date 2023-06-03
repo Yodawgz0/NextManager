@@ -51,6 +51,8 @@ export default function Dashboard() {
   const [editPlayerModal, setEditPlayerModal] = useState<boolean>(false);
   const [tableLoading, setTableLoading] = useState<boolean>(false);
   const [userName, setUserName] = useState<string>("");
+  const [signOutLoad, setSignOutLoad] = useState<boolean>(false);
+
   const [dataPlayerEdit, setDataPlayerEdit] = useState<DataType>({
     GAME_ID: 0,
     SHOT_NUMBER: 0,
@@ -61,6 +63,19 @@ export default function Dashboard() {
   });
 
   const [form] = Form.useForm();
+
+  const handleSingOut = () => {
+    setSignOutLoad(true);
+    axios
+      .get("http://localhost:8000/userSignOut")
+      .then((response) => {
+        router.push("/LoginPage");
+      })
+      .catch((error) => {
+        setAlertText(error.data.message);
+      });
+  };
+
   const onFinish = (values: any) => {
     const userDetails = {
       GAME_ID: values.GameID,
@@ -201,7 +216,6 @@ export default function Dashboard() {
 
   useEffect(() => {
     getPlayerData();
-    getUserData();
   }, []);
 
   return (
@@ -231,6 +245,19 @@ export default function Dashboard() {
         <></>
       )}
       <div className="bg-slate-950 h-screen flex flex-col items-center justify-center">
+        <div className="w-full flex justify-end">
+          {" "}
+          <Button
+            type="primary"
+            className="text-rose-950 bg-rose-200 me-4 mb-10 w-40 "
+            loading={signOutLoad}
+            onClick={() => handleSingOut()}
+          >
+            {" "}
+            Sign Out
+          </Button>
+        </div>
+
         <h2 className="text-sky-400 mb-10 text-4xl">
           Welcome at the grind!{" "}
           {userName.length ? userName : <Spin indicator={spinnerIcon} />}
