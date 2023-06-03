@@ -10,6 +10,7 @@ interface modalprops {
   setopenModal: Dispatch<SetStateAction<boolean>>;
   dataPlayerEdit: DataType;
   setAlertText: Dispatch<SetStateAction<string>>;
+  getPlayerData: Function;
 }
 
 const EditTable = ({
@@ -17,6 +18,7 @@ const EditTable = ({
   setopenModal,
   dataPlayerEdit,
   setAlertText,
+  getPlayerData,
 }: modalprops) => {
   const [showError, setShowError] = useState<boolean>(false);
 
@@ -53,6 +55,7 @@ const EditTable = ({
             setAlertText("Something Went Wrong");
           });
       }
+      getPlayerData();
       setopenModal(false);
     } else {
       setShowError(true);
@@ -68,7 +71,6 @@ const EditTable = ({
   const handleCancel = () => {
     setShowError(false);
     setopenModal(false);
-    console.log("Clicked cancel button");
   };
 
   return (

@@ -4,11 +4,14 @@ import Link from "next/link";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { useRouter } from "next/router";
+import { Spin } from "antd";
 
 export default function LoginPage() {
   const router = useRouter();
   const [alertText, setAlertText] = useState<string>("");
+  const [showLoad, setShowLoad] = useState<boolean>(false);
   const onFinish = (values: any) => {
+    setShowLoad(true);
     const userDetails = {
       email: values.email,
       password: values.password,
@@ -91,16 +94,8 @@ export default function LoginPage() {
           </Form.Item>
 
           <Form.Item className="w-44 flex items-center flex-col mx-10 justify-around">
-            {/* <Link href="/Dashboard">
-              <Button
-                htmlType="submit"
-                className="px-10 bg-amber-950 text-white"
-              >
-                Login
-              </Button>
-            </Link> */}
             <Button htmlType="submit" className="px-10 bg-amber-950 text-white">
-              Login
+              {showLoad ? <Spin /> : "Login"}
             </Button>
           </Form.Item>
           <Link

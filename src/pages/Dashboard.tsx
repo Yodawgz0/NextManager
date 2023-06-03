@@ -7,6 +7,7 @@ import type { ColumnsType } from "antd/es/table";
 import axios from "axios";
 import EditTable from "@/components/EditTable";
 import { ObjectId } from "bson";
+import router from "next/router";
 
 axios.defaults.withCredentials = true;
 
@@ -116,6 +117,9 @@ export default function Dashboard() {
       })
       .catch(function (error) {
         setAlertText(error.data.message);
+        if (error.data.message == "Unauthorized") {
+          router.push("/LoginPage");
+        }
       });
 
     setDeletingSpinner(false);
@@ -149,19 +153,50 @@ export default function Dashboard() {
   const getPlayerData = () => {
     setTableLoading(true);
     axios
-      .get("http://localhost:8000/AllPlayerData")
+      .get(`http://localhost:8000/AllPlayerData/`)
       .then((data) => {
         setPlayerData(data.data.data);
         setTableLoading(false);
+        getUserData();
       })
       .catch((err) => {
-        setAlertText("Server Problem , Please retry in a while!");
+        try {
+          if (err.response.data.message === "Unauthorized") {
+            router.push("/LoginPage");
+            setAlertText("Please Login, Unauthorized Page!");
+          } else {
+            setAlertText("Server Problem , Please retry in a while!");
+          }
+        } catch {
+          setAlertText("Unable to reach servers!");
+        }
+      });
+  };
+
+  const getUserData = () => {
+    axios
+      .get(`http://localhost:8000/getUsername`)
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((err) => {
+        try {
+          if (err.response.data.message === "Unauthorized") {
+            router.push("/LoginPage");
+            setAlertText("Please Login, Unauthorized Page!");
+          } else {
+            setAlertText("Server Problem , Please retry in a while!");
+          }
+        } catch {
+          setAlertText("Unable to reach servers!");
+        }
       });
   };
 
   useEffect(() => {
     getPlayerData();
-  }, [editPlayerModal]);
+    getUserData();
+  }, []);
 
   return (
     <>
@@ -184,6 +219,7 @@ export default function Dashboard() {
           setopenModal={setEditPlayerModal}
           dataPlayerEdit={dataPlayerEdit}
           setAlertText={setAlertText}
+          getPlayerData={getPlayerData}
         />
       ) : (
         <></>
