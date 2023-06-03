@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Alert, Button, Form, Input, InputNumber } from "antd";
 import { Col, Row } from "antd";
-import { FormOutlined, NumberOutlined, UserOutlined } from "@ant-design/icons";
+import {
+  FormOutlined,
+  NumberOutlined,
+  UserOutlined,
+  LoadingOutlined,
+} from "@ant-design/icons";
 import { Table, Spin } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import axios from "axios";
@@ -10,7 +15,7 @@ import { ObjectId } from "bson";
 import router from "next/router";
 
 axios.defaults.withCredentials = true;
-
+const spinnerIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 const layout = {
   labelCol: { span: 8 },
   wrapperCol: { span: 16 },
@@ -45,6 +50,7 @@ export default function Dashboard() {
   const [deletingSpinner, setDeletingSpinner] = useState<boolean>(false);
   const [editPlayerModal, setEditPlayerModal] = useState<boolean>(false);
   const [tableLoading, setTableLoading] = useState<boolean>(false);
+  const [userName, setUserName] = useState<string>("");
   const [dataPlayerEdit, setDataPlayerEdit] = useState<DataType>({
     GAME_ID: 0,
     SHOT_NUMBER: 0,
@@ -177,7 +183,7 @@ export default function Dashboard() {
     axios
       .get(`http://localhost:8000/getUsername`)
       .then((data) => {
-        console.log(data);
+        setUserName(data.data.message);
       })
       .catch((err) => {
         try {
@@ -224,8 +230,11 @@ export default function Dashboard() {
       ) : (
         <></>
       )}
-      <div className="bg-slate-950 h-screen flex items-center justify-center">
-        {" "}
+      <div className="bg-slate-950 h-screen flex flex-col items-center justify-center">
+        <h2 className="text-sky-400 mb-10 text-4xl">
+          Welcome at the grind!{" "}
+          {userName.length ? userName : <Spin indicator={spinnerIcon} />}
+        </h2>
         <Form
           {...layout}
           form={form}

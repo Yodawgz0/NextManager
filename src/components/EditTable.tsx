@@ -49,13 +49,14 @@ const EditTable = ({
           })
           .then(function (response) {
             setAlertText(response.data.message);
+            getPlayerData();
           })
           .catch(function (err) {
             console.log(err);
             setAlertText("Something Went Wrong");
           });
       }
-      getPlayerData();
+
       setopenModal(false);
     } else {
       setShowError(true);
