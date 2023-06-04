@@ -29,6 +29,7 @@ export default function LoginPage() {
         if (error.response.data.message === "User Not Found") {
           setAlertText("User Not Found");
         } else if (error.response.data.message === "Wrong Password") setAlertText("Wrong Password");
+        setShowLoad(false);
       });
   };
 
