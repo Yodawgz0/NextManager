@@ -15,7 +15,7 @@ import { ObjectId } from "bson";
 import router from "next/router";
 
 axios.defaults.withCredentials = true;
-const spinnerIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
+export const spinnerIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 const layout = {
   labelCol: { span: 8 },
   wrapperCol: { span: 16 },
@@ -73,6 +73,7 @@ export default function Dashboard() {
       })
       .catch((error) => {
         setAlertText(error.data.message);
+        setSignOutLoad(false);
       });
   };
 
@@ -245,8 +246,15 @@ export default function Dashboard() {
         <></>
       )}
       <div className="bg-slate-950 h-screen flex flex-col items-center justify-center">
-        <div className="w-full flex justify-end">
-          {" "}
+        <div className="w-full flex justify-between">
+          <Button
+            type="primary"
+            className="text-green-950 bg-green-200 ms-4 mb-10 w-40 "
+            onClick={() => router.push("/UploadPage")}
+          >
+            {" "}
+            Upload Documents
+          </Button>{" "}
           <Button
             type="primary"
             className="text-rose-950 bg-rose-200 me-4 mb-10 w-40 "
