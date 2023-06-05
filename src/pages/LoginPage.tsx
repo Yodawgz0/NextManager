@@ -26,13 +26,16 @@ export default function LoginPage() {
         }
       })
       .catch(function (error) {
-        if (error.response.data.message === "User Not Found") {
-          setAlertText("User Not Found");
-        } else if (error.response.data.message === "Wrong Password") setAlertText("Wrong Password");
+        try {
+          if (error.response.data.message === "User Not Found") {
+            setAlertText("User Not Found");
+          } else if (error.response.data.message === "Wrong Password") setAlertText("Wrong Password");
+        } catch {
+          setAlertText("Something went wrong! ");
+        }
         setShowLoad(false);
       });
   };
-
   const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
   };

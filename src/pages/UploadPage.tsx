@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { InboxOutlined, SwapLeftOutlined } from "@ant-design/icons";
+import {
+  InboxOutlined,
+  LogoutOutlined,
+  SwapLeftOutlined,
+} from "@ant-design/icons";
 import { Alert, Button, Spin, UploadProps } from "antd";
 import { message, Upload } from "antd";
 import axios from "axios";
@@ -98,8 +102,8 @@ export default function UploadPage() {
             loading={signOutLoad}
             onClick={() => handleSingOut()}
           >
-            {" "}
             Sign Out
+            <LogoutOutlined style={{ fontSize: 20 }} />
           </Button>
         </div>
         <div className="w-full text-center">

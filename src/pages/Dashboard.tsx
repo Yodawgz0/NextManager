@@ -6,6 +6,7 @@ import {
   NumberOutlined,
   UserOutlined,
   LoadingOutlined,
+  LogoutOutlined,
 } from "@ant-design/icons";
 import { Table, Spin } from "antd";
 import type { ColumnsType } from "antd/es/table";
@@ -261,7 +262,7 @@ export default function Dashboard() {
             loading={signOutLoad}
             onClick={() => handleSingOut()}
           >
-            {" "}
+            <LogoutOutlined style={{ fontSize: 20 }} />
             Sign Out
           </Button>
         </div>
