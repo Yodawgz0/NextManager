@@ -11,15 +11,13 @@ import router from "next/router";
 import { spinnerIcon } from "./Dashboard";
 
 const { Dragger } = Upload;
-
-const dummyRequest = async () => {
-  setTimeout(() => {}, 0);
-};
+axios.defaults.withCredentials = true;
 
 const props: UploadProps = {
   name: "file",
   multiple: true,
   action: "http://localhost:8000/uploadfile",
+  withCredentials: true,
   onChange(info) {
     console.log(info);
     const { status } = info.file;
@@ -37,7 +35,14 @@ const props: UploadProps = {
     console.log("Dropped files", e.dataTransfer.files);
   },
   onRemove(file) {
-    console.log(file.uid);
+    axios
+      .delete(`http://localhost:8000/deleteFile/${file.name}`)
+      .then((res) => {
+        message.success(`${file.name} ${res}`);
+      })
+      .catch((err) => {
+        message.error(`${file.name} ${err.message}`);
+      });
   },
 };
 
