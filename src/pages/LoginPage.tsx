@@ -15,6 +15,7 @@ export default function LoginPage() {
       email: values.email,
       password: values.password,
     };
+
     axios
       .post("http://localhost:8000/login", {
         userDetails,
