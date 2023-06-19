@@ -9,6 +9,7 @@ import { message, Upload } from "antd";
 import axios from "axios";
 import router from "next/router";
 import { spinnerIcon } from "./Dashboard";
+import ViewFiles from "@/components/ViewFiles";
 
 const { Dragger } = Upload;
 axios.defaults.withCredentials = true;
@@ -143,6 +144,9 @@ export default function UploadPage() {
               </p>
             </Dragger>
           </div>
+        </div>
+        <div>
+          <ViewFiles />
         </div>
       </div>
     </>
