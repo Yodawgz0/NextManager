@@ -39,7 +39,7 @@ const props: UploadProps = {
     axios
       .delete(`http://localhost:8000/deleteFile/${file.name}`)
       .then((res) => {
-        message.success(`${file.name} ${res}`);
+        message.success(`${file.name} ${res.data.message}`);
       })
       .catch((err) => {
         message.error(`${file.name} ${err.message}`);
@@ -129,7 +129,7 @@ export default function UploadPage() {
           </h3>
         </div>
         <div className=" w-3/5 p-10 rounded-lg border-solid">
-          <div className="bg-cyan-500 p-4">
+          <div className="bg-violet-300 p-4">
             {" "}
             <Dragger {...props}>
               <p className="ant-upload-drag-icon">
@@ -145,9 +145,7 @@ export default function UploadPage() {
             </Dragger>
           </div>
         </div>
-        <div>
-          <ViewFiles />
-        </div>
+        <ViewFiles />
       </div>
     </>
   );
