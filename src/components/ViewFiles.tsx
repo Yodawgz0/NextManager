@@ -17,6 +17,11 @@ export default function ViewFiles() {
   const [allFilesData, setAllFilesData] = useState<fileprops[]>([]);
   const [spinShow, setSpinShow] = useState<[boolean, number]>([false, 0]);
   const [noDataFlag, setNoDataFlag] = useState<boolean>(false);
+  const [link, setLink] = useState<[string, string]>(["", ""]);
+  const [linkFetchFlag, setLinkFetchFlag] = useState<[boolean, string]>([
+    false,
+    "",
+  ]);
 
   const getAllFiles = () => {
     const tempallfilesdata: fileprops[] = [];
@@ -25,18 +30,7 @@ export default function ViewFiles() {
       .then((res) => {
         if (res.data.length) {
           res.data.forEach((e: fileprops) => {
-            const uint8Array = new Uint8Array(parseInt(e.filesize));
-            console.log(e.content);
-
-            for (let i = 0; i < parseInt(e.filesize); i++) {
-              uint8Array[i] = e.content.charCodeAt(i);
-            }
-            console.log(uint8Array);
-            const blob = new Blob([uint8Array], {
-              type: "image/jpeg",
-            });
-            const url = "data:image/jpg;base64, " + e.content;
-            tempallfilesdata.push({ ...e, downloadLink: url });
+            tempallfilesdata.push(e);
           });
           setAllFilesData(tempallfilesdata);
           setSpinShow([false, 0]);
@@ -61,6 +55,22 @@ export default function ViewFiles() {
       });
   };
 
+  const getFileDownloadLink = (filename: string) => {
+    setLinkFetchFlag([true, filename]);
+    axios
+      .get(`http://localhost:8000/getFile/${filename}`, {
+        responseType: "blob",
+      })
+      .then((res) =>
+        setLink([
+          URL.createObjectURL(new Blob([res.data], { type: "image/jpeg" })),
+          filename,
+        ])
+      )
+      //.then((res) => setLink(URL.createObjectURL(res.data)))
+      .catch((err) => console.log(err));
+  };
+
   useEffect(() => {
     getAllFiles();
   }, []);
@@ -75,7 +85,7 @@ export default function ViewFiles() {
                 key={index}
                 className=" px-11 my-6 flex flex-row justify-between  text-yellow-950"
               >
-                <p className="flex flex-row">
+                <div className="flex flex-row">
                   {element.filename}
                   <p className="ps-1 italic">
                     {"("}
@@ -84,14 +94,30 @@ export default function ViewFiles() {
                       .slice(0, 3)}
                     {" MB)"}
                   </p>
-                  <a
-                    href={element.downloadLink}
-                    download={element.filename}
-                    className="ms-2 text-blue-700 italic"
-                  >
-                    preview
-                  </a>
-                </p>
+                  {link[0].length && link[1] === element.filename ? (
+                    <a
+                      download={element.filename}
+                      href={link[0]}
+                      onClick={() => {
+                        setLink(["", ""]);
+                        setLinkFetchFlag([false, ""]);
+                      }}
+                      className="ms-2 text-red-700 italic"
+                    >
+                      Download!
+                    </a>
+                  ) : linkFetchFlag[0] &&
+                    linkFetchFlag[1] === element.filename ? (
+                    <Spin className="ms-2 text-lg" />
+                  ) : (
+                    <p
+                      onClick={() => getFileDownloadLink(element.filename)}
+                      className="ms-2 text-blue-700 italic cursor-pointer"
+                    >
+                      Get Link
+                    </p>
+                  )}
+                </div>
                 {spinShow[0] && spinShow[1] === index ? (
                   <Spin className="text-lg" />
                 ) : (
