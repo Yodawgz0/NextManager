@@ -25,10 +25,17 @@ export default function ViewFiles() {
       .then((res) => {
         if (res.data.length) {
           res.data.forEach((e: fileprops) => {
-            const blob = new Blob([e.content], {
+            const uint8Array = new Uint8Array(parseInt(e.filesize));
+            console.log(e.content);
+
+            for (let i = 0; i < parseInt(e.filesize); i++) {
+              uint8Array[i] = e.content.charCodeAt(i);
+            }
+            console.log(uint8Array);
+            const blob = new Blob([uint8Array], {
               type: "image/jpeg",
             });
-            const url = URL.createObjectURL(blob);
+            const url = "data:image/jpg;base64, " + e.content;
             tempallfilesdata.push({ ...e, downloadLink: url });
           });
           setAllFilesData(tempallfilesdata);
