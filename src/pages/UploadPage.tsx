@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   InboxOutlined,
   LogoutOutlined,
@@ -14,44 +14,15 @@ import ViewFiles from "@/components/ViewFiles";
 const { Dragger } = Upload;
 axios.defaults.withCredentials = true;
 
-const props: UploadProps = {
-  name: "file",
-  multiple: true,
-  action: "http://localhost:8000/uploadfile",
-  withCredentials: true,
-  onChange(info) {
-    console.log(info);
-    const { status } = info.file;
-    console.log(status);
-    if (status !== "uploading") {
-      console.log(info.file, info.fileList);
-    }
-    if (status === "done") {
-      message.success(`${info.file.name} file uploaded successfully.`);
-    } else if (status === "error") {
-      message.error(`${info.file.name} file upload failed.`);
-    }
-  },
-  onDrop(e) {
-    console.log("Dropped files", e.dataTransfer.files);
-  },
-  onRemove(file) {
-    axios
-      .delete(`http://localhost:8000/deleteFile/${file.name}`)
-      .then((res) => {
-        message.success(`${file.name} ${res.data.message}`);
-      })
-      .catch((err) => {
-        message.error(`${file.name} ${err.message}`);
-      });
-  },
-};
-
 export default function UploadPage() {
   const [userName, setUserName] = useState<string>("");
   const [alertText, setAlertText] = useState<string>("");
   const [signOutLoad, setSignOutLoad] = useState<boolean>(false);
 
+  const [renderTrigg, setRenderTrigg] = useState<boolean>(false);
+  const MemoizedViewFiles = useCallback(() => {
+    return <ViewFiles />;
+  }, [renderTrigg]);
   useEffect(() => {
     axios
       .get(`http://localhost:8000/getUsername`)
@@ -83,6 +54,41 @@ export default function UploadPage() {
         setAlertText(error.data.message);
         setSignOutLoad(false);
       });
+  };
+
+  const props: UploadProps = {
+    name: "file",
+    multiple: true,
+    action: "http://localhost:8000/uploadfile",
+    withCredentials: true,
+    onChange(info) {
+      console.log(info);
+      const { status } = info.file;
+      console.log(status);
+      if (status !== "uploading") {
+        console.log(info.file, info.fileList);
+      }
+      if (status === "done") {
+        message.success(`${info.file.name} file uploaded successfully.`);
+        setRenderTrigg(!renderTrigg);
+      } else if (status === "error") {
+        message.error(`${info.file.name} file upload failed.`);
+      }
+    },
+    onDrop(e) {
+      console.log("Dropped files", e.dataTransfer.files);
+    },
+    onRemove(file) {
+      axios
+        .delete(`http://localhost:8000/deleteFile/${file.name}`)
+        .then((res) => {
+          message.success(`${file.name} ${res.data.message}`);
+          setRenderTrigg(!renderTrigg);
+        })
+        .catch((err) => {
+          message.error(`${file.name} ${err.message}`);
+        });
+    },
   };
 
   return (
@@ -145,7 +151,7 @@ export default function UploadPage() {
             </Dragger>
           </div>
         </div>
-        <ViewFiles />
+        <MemoizedViewFiles />
       </div>
     </>
   );
