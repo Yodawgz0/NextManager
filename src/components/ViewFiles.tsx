@@ -1,4 +1,4 @@
-import { DeleteFilled } from "@ant-design/icons";
+import { DeleteFilled, EditOutlined } from "@ant-design/icons";
 import { Skeleton, Spin, message } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
@@ -94,6 +94,7 @@ export default function ViewFiles() {
                       .slice(0, 3)}
                     {" MB)"}
                   </p>
+                  <EditOutlined className="ms-1" />
                   {link[0].length && link[1] === element.filename ? (
                     <a
                       download={element.filename}
