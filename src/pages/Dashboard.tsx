@@ -218,6 +218,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     getPlayerData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

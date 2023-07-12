@@ -22,6 +22,7 @@ export default function UploadPage() {
   const [renderTrigg, setRenderTrigg] = useState<boolean>(false);
   const MemoizedViewFiles = useCallback(() => {
     return <ViewFiles />;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [renderTrigg]);
   useEffect(() => {
     axios
