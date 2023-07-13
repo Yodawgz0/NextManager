@@ -1,4 +1,9 @@
-import { DeleteFilled, EditOutlined } from "@ant-design/icons";
+import {
+  CheckOutlined,
+  DeleteFilled,
+  EditOutlined,
+  StopOutlined,
+} from "@ant-design/icons";
 import { Skeleton, Spin, message } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
@@ -18,6 +23,8 @@ export default function ViewFiles() {
   const [spinShow, setSpinShow] = useState<[boolean, number]>([false, 0]);
   const [noDataFlag, setNoDataFlag] = useState<boolean>(false);
   const [link, setLink] = useState<[string, string]>(["", ""]);
+  const [renameFlag, setRenameFlag] = useState<[boolean, string]>([false, ""]);
+  const [renameSet, setRenameSet] = useState<string>("");
   const [linkFetchFlag, setLinkFetchFlag] = useState<[boolean, string]>([
     false,
     "",
@@ -54,6 +61,15 @@ export default function ViewFiles() {
         setSpinShow([false, 0]);
       });
   };
+  const handleRenameInput = (renameFilename: string, IDFile: String) => {
+    setRenameFlag([false, ""]);
+    axios
+      .get(`http://localhost:8000/${renameFilename}?${IDFile}`)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => console.log(err));
+  };
 
   const getFileDownloadLink = (filename: string) => {
     setLinkFetchFlag([true, filename]);
@@ -67,7 +83,6 @@ export default function ViewFiles() {
           filename,
         ])
       )
-      //.then((res) => setLink(URL.createObjectURL(res.data)))
       .catch((err) => console.log(err));
   };
 
@@ -86,7 +101,15 @@ export default function ViewFiles() {
                 className=" px-11 my-6 flex flex-row justify-between  text-yellow-950"
               >
                 <div className="flex flex-row">
-                  {element.filename}
+                  {renameFlag[0] && renameFlag[1] === element.filename ? (
+                    <input
+                      className="px-2 py-1 overflow-ellipsis"
+                      placeholder={element.filename}
+                      onChange={(e) => setRenameSet(e.target.value)}
+                    />
+                  ) : (
+                    element.filename
+                  )}
                   <p className="ps-1 italic">
                     {"("}
                     {(parseInt(element.filesize) / (1024 * 1024))
@@ -94,7 +117,28 @@ export default function ViewFiles() {
                       .slice(0, 3)}
                     {" MB)"}
                   </p>
-                  <EditOutlined className="ms-1" />
+                  {renameFlag[0] && renameFlag[1] === element.filename ? (
+                    <>
+                      <CheckOutlined
+                        onClick={() =>
+                          handleRenameInput(renameSet, element._id)
+                        }
+                        className="ms-1"
+                      />
+                      <StopOutlined
+                        onClick={() => {
+                          setRenameFlag([false, ""]);
+                          setRenameSet("");
+                        }}
+                        className="ms-1"
+                      />
+                    </>
+                  ) : (
+                    <EditOutlined
+                      onClick={() => setRenameFlag([true, element.filename])}
+                      className="ms-1"
+                    />
+                  )}
                   {link[0].length && link[1] === element.filename ? (
                     <a
                       download={element.filename}
