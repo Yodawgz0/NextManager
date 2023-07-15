@@ -64,9 +64,9 @@ export default function ViewFiles() {
   const handleRenameInput = (renameFilename: string, IDFile: String) => {
     setRenameFlag([false, ""]);
     axios
-      .get(`http://localhost:8000/${renameFilename}?${IDFile}`)
+      .patch(`http://localhost:8000/renamefile/${IDFile}&${renameFilename}`)
       .then((res) => {
-        console.log(res);
+        getAllFiles();
       })
       .catch((err) => console.log(err));
   };
@@ -119,24 +119,28 @@ export default function ViewFiles() {
                   </p>
                   {renameFlag[0] && renameFlag[1] === element.filename ? (
                     <>
-                      <CheckOutlined
-                        onClick={() =>
-                          handleRenameInput(renameSet, element._id)
-                        }
-                        className="ms-1"
-                      />
+                      {renameSet.length ? (
+                        <CheckOutlined
+                          onClick={() =>
+                            handleRenameInput(renameSet, element._id)
+                          }
+                          className="ms-1 mt-1"
+                        />
+                      ) : (
+                        <></>
+                      )}
                       <StopOutlined
                         onClick={() => {
                           setRenameFlag([false, ""]);
                           setRenameSet("");
                         }}
-                        className="ms-1"
+                        className="ms-1 mt-1"
                       />
                     </>
                   ) : (
                     <EditOutlined
                       onClick={() => setRenameFlag([true, element.filename])}
-                      className="ms-1"
+                      className="ms-1 mt-1"
                     />
                   )}
                   {link[0].length && link[1] === element.filename ? (
