@@ -107,7 +107,7 @@ export default function ViewFiles() {
                       placeholder={element.filename}
                       onChange={(e) => setRenameSet(e.target.value)}
                     />
-                  ) : (
+                  ) : ( 
                     element.filename
                   )}
                   <p className="ps-1 italic">
