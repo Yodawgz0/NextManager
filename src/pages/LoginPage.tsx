@@ -17,7 +17,7 @@ export default function LoginPage() {
     };
 
     axios
-      .post("http://localhost:8000/login", {
+      .post("https://express-server-three.vercel.app/login", {
         userDetails,
       })
       .then(function (response) {
@@ -110,7 +110,7 @@ export default function LoginPage() {
             className=" flex justify-around text-rose-700"
             href="/RegisterPage"
           >
-            Don't have an account? Register
+            Donot have an account? Register
           </Link>
         </Form>
       </div>
