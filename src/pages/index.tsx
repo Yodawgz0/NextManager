@@ -15,12 +15,12 @@ export default function Home() {
           className="flex"
         >
           <Link href="/LoginPage">
-            <Button className="m-4" block type="primary" ghost>
+            <Button className="m-4" block name="Login" type="primary" ghost>
               Login
             </Button>
           </Link>
           <Link href="/RegisterPage">
-            <Button className="m-4" block danger>
+            <Button className="m-4" name="Register" block danger>
               Register
             </Button>
           </Link>
