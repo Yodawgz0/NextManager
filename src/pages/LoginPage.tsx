@@ -5,6 +5,8 @@ import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { useRouter } from "next/router";
 
+axios.defaults.withCredentials = true;
+
 export default function LoginPage() {
   const router = useRouter();
   const [alertText, setAlertText] = useState<string>("");
