@@ -8,7 +8,5 @@ describe("Login Page", () => {
     cy.get("input[placeholder='Email']").type(constants.username);
     cy.get("input[placeholder='Password']").type(constants.password);
     cy.contains("Login").click();
-    
-    
   });
 });
