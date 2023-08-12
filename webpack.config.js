@@ -33,6 +33,7 @@ module.exports = {
       },
     ],
   },
+  stats: "errors-only",
 
   resolve: {
     extensions: [".tsx", ".ts", ".js"],
