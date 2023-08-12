@@ -21,7 +21,14 @@ module.exports = {
       },
       {
         test: /\.(t|j)sx?$/,
-        use: { loader: "ts-loader" },
+        use: {
+          loader: "ts-loader",
+          options: {
+            transpileOnly: true,
+            experimentalWatchApi: true,
+            onlyCompileBundledFiles: true,
+          },
+        },
         exclude: /node_modules/,
       },
     ],
