@@ -14,6 +14,7 @@ import axios from "axios";
 import EditTable from "@/components/EditTable";
 import { ObjectId } from "bson";
 import router from "next/router";
+import FilterTable from "@/components/FilterTable";
 
 axios.defaults.withCredentials = true;
 export const spinnerIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
@@ -374,6 +375,7 @@ export default function Dashboard() {
           </Form.Item>
         </Form>
       </div>
+      <FilterTable />
       <Table
         loading={tableLoading}
         className="p-11 bg-amber-100"
