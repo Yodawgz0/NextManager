@@ -375,7 +375,7 @@ export default function Dashboard() {
           </Form.Item>
         </Form>
       </div>
-      <FilterTable />
+      <FilterTable setPlayerData={setPlayerData} playerData={playerData} />
       <Table
         loading={tableLoading}
         className="p-11 bg-amber-100"
