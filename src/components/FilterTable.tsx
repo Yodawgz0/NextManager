@@ -1,12 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { Input, Select } from "antd";
 import axios from "axios";
+import { DataType } from "@/pages/Dashboard";
 const { Search } = Input;
 axios.defaults.withCredentials = true;
-function FilterTable() {
+
+interface Ifilterprops {
+  setPlayerData: React.Dispatch<React.SetStateAction<DataType[]>>;
+  playerData: DataType[];
+}
+
+function FilterTable({ setPlayerData, playerData }: Ifilterprops) {
   const [loadingSearchName, setLoadingSearchName] = useState<boolean>(false);
   const handleChange = (value: string) => {
-    console.log(`selected ${value}`);
+    axios
+      .get(`http://localhost:8000/playerDataFilter/filter:${value}`)
+      .then((res) => setPlayerData(res.data.data));
   };
 
   const [playerNamesUniq, setPlayerNamesUniq] = useState<
@@ -14,13 +23,10 @@ function FilterTable() {
   >([]);
 
   useEffect(() => {
-    // axios
-    //   .get("http://localhost:8000/playerDataFilter")
-    //   .then((res) => console.log(res));
     axios
       .get("http://localhost:8000/playerDataFilter/getplayernames")
       .then((res) => setPlayerNamesUniq(res.data.data[0].names));
-  }, []);
+  }, [playerData]);
 
   return (
     <>
