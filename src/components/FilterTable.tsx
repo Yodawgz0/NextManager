@@ -25,7 +25,11 @@ function FilterTable({ setPlayerData, playerData }: Ifilterprops) {
   useEffect(() => {
     axios
       .get("http://localhost:8000/playerDataFilter/getplayernames")
-      .then((res) => setPlayerNamesUniq(res.data.data[0].names));
+      .then((res) => {
+        setPlayerNamesUniq(res.data.data[0].names);
+        setLoadingSearchName(false);
+      })
+      .catch((err) => console.log(err));
   }, [playerData]);
 
   return (
