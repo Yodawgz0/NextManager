@@ -22,22 +22,22 @@ function FilterTable({ setPlayerData, playerData }: Ifilterprops) {
       .get(
         `http://localhost:8000/playerDataFilter/${
           shotMadeFilter
-            ? `PLAYERNAME:${value}&SHOTMADE:${shotMadeFilter}`
-            : `PLAYERNAME:${value}&SHOTMADE?`
+            ? `PLAYERNAME:${value}&SHOTRESULT:${shotMadeFilter}`
+            : `PLAYERNAME:${value}&SHOTRESULT?`
         }`
       )
       .then((res) => setPlayerData(res.data.data))
       .catch((err) => console.log(err));
   };
 
-  const handleShotMadeChange = (value: string) => {
+  const handleShotResultChange = (value: string) => {
     setShotMadeFilter(value);
     axios
       .get(
         `http://localhost:8000/playerDataFilter/${
           shotMadeFilter
-            ? `PLAYERNAME:${value}&SHOTMADE:${shotMadeFilter}`
-            : `PLAYERNAME:${value}&SHOTMADE?`
+            ? `PLAYERNAME:${playeNameFilter}&SHOTRESULT:${value}`
+            : `PLAYERNAME:?&SHOTRESULT${value}`
         }`
       )
       .then((res) => setPlayerData(res.data.data))
@@ -79,7 +79,7 @@ function FilterTable({ setPlayerData, playerData }: Ifilterprops) {
         />
         <Select
           defaultValue="Shot Made filter..."
-          onChange={handleShotMadeChange}
+          onChange={handleShotResultChange}
           className="mt-3 ms-5 w-64"
           options={[
             { value: "made", label: "Made" },
