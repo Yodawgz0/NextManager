@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Input, Select } from "antd";
+import { Input, Select, message } from "antd";
 import axios from "axios";
 import { DataType } from "@/pages/Dashboard";
+import { ClearOutlined } from "@ant-design/icons";
 const { Search } = Input;
 axios.defaults.withCredentials = true;
 
@@ -12,17 +13,42 @@ interface Ifilterprops {
 
 function FilterTable({ setPlayerData, playerData }: Ifilterprops) {
   const [loadingSearchName, setLoadingSearchName] = useState<boolean>(false);
-  const handleChange = (value: string) => {
+  const [playeNameFilter, setPlayeNameFilter] = useState<string>("");
+  const [shotMadeFilter, setShotMadeFilter] = useState<string>("");
+
+  const handlePlayerNameChange = (value: string) => {
+    setPlayeNameFilter(value);
     axios
-      .get(`http://localhost:8000/playerDataFilter/filter:${value}`)
-      .then((res) => setPlayerData(res.data.data));
+      .get(
+        `http://localhost:8000/playerDataFilter/${
+          shotMadeFilter
+            ? `PLAYERNAME:${value}&SHOTMADE:${shotMadeFilter}`
+            : `PLAYERNAME:${value}&SHOTMADE?`
+        }`
+      )
+      .then((res) => setPlayerData(res.data.data))
+      .catch((err) => console.log(err));
   };
 
+  const handleShotMadeChange = (value: string) => {
+    setShotMadeFilter(value);
+    axios
+      .get(
+        `http://localhost:8000/playerDataFilter/${
+          shotMadeFilter
+            ? `PLAYERNAME:${value}&SHOTMADE:${shotMadeFilter}`
+            : `PLAYERNAME:${value}&SHOTMADE?`
+        }`
+      )
+      .then((res) => setPlayerData(res.data.data))
+      .catch((err) => console.log(err));
+  };
   const [playerNamesUniq, setPlayerNamesUniq] = useState<
     { [key: string]: string }[]
   >([]);
 
   useEffect(() => {
+    setLoadingSearchName(true);
     axios
       .get("http://localhost:8000/playerDataFilter/getplayernames")
       .then((res) => {
@@ -39,11 +65,10 @@ function FilterTable({ setPlayerData, playerData }: Ifilterprops) {
           className=" bg-violet-950 mt-3 rounded-lg w-96"
           placeholder="input search text"
           enterButton="Search"
-          loading={loadingSearchName}
         />
         <Select
-          defaultValue="Please choose one..."
-          onChange={handleChange}
+          defaultValue="Choose Player Name..."
+          onChange={handlePlayerNameChange}
           className="mt-3 ms-5 w-64"
           options={playerNamesUniq.map((item) => ({
             value: item,
