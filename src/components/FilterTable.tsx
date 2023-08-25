@@ -45,6 +45,24 @@ function FilterTable({ setPlayerData, playerData }: Ifilterprops) {
             value: item,
             label: item,
           }))}
+          value={playeNameFilter ? playeNameFilter : "Choose Player Name..."}
+          loading={loadingSearchName}
+        />
+        <Select
+          defaultValue="Shot Made filter..."
+          onChange={handleShotMadeChange}
+          className="mt-3 ms-5 w-64"
+          options={[
+            { value: "made", label: "Made" },
+            { value: "missed", label: "Missed" },
+          ]}
+        />
+        <ClearOutlined
+          onClick={() => {
+            setPlayeNameFilter("");
+            setShotMadeFilter("");
+          }}
+          className="ms-5 text-xl"
         />
       </div>
     </>
