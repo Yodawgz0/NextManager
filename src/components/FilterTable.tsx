@@ -35,7 +35,7 @@ function FilterTable({ setPlayerData, playerData }: Ifilterprops) {
     axios
       .get(
         `http://localhost:8000/playerDataFilter/${
-          shotMadeFilter
+          playeNameFilter
             ? `PLAYERNAME:${playeNameFilter}&SHOTRESULT:${value}`
             : `PLAYERNAME:?&SHOTRESULT${value}`
         }`
@@ -85,6 +85,7 @@ function FilterTable({ setPlayerData, playerData }: Ifilterprops) {
             { value: "made", label: "Made" },
             { value: "missed", label: "Missed" },
           ]}
+          value={shotMadeFilter ? shotMadeFilter : "Shot Made filter..."}
         />
         <ClearOutlined
           onClick={() => {
