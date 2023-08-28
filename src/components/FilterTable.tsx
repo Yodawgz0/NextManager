@@ -23,7 +23,7 @@ function FilterTable({ setPlayerData, playerData }: Ifilterprops) {
         `http://localhost:8000/playerDataFilter/${
           shotMadeFilter
             ? `PLAYERNAME:${value}&SHOTRESULT:${shotMadeFilter}`
-            : `PLAYERNAME:${value}&SHOTRESULT?`
+            : `PLAYERNAME:${value}&SHOTRESULT:`
         }`
       )
       .then((res) => setPlayerData(res.data.data))
@@ -37,7 +37,7 @@ function FilterTable({ setPlayerData, playerData }: Ifilterprops) {
         `http://localhost:8000/playerDataFilter/${
           playeNameFilter
             ? `PLAYERNAME:${playeNameFilter}&SHOTRESULT:${value}`
-            : `PLAYERNAME:?&SHOTRESULT${value}`
+            : `PLAYERNAME:&SHOTRESULT${value}`
         }`
       )
       .then((res) => setPlayerData(res.data.data))
