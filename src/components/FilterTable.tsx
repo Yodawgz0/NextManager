@@ -37,7 +37,7 @@ function FilterTable({ setPlayerData, playerData }: Ifilterprops) {
         `http://localhost:8000/playerDataFilter/${
           playeNameFilter
             ? `PLAYERNAME:${playeNameFilter}&SHOTRESULT:${value}`
-            : `PLAYERNAME:&SHOTRESULT${value}`
+            : `PLAYERNAME:&SHOTRESULT:${value}`
         }`
       )
       .then((res) => setPlayerData(res.data.data))
@@ -46,6 +46,16 @@ function FilterTable({ setPlayerData, playerData }: Ifilterprops) {
   const [playerNamesUniq, setPlayerNamesUniq] = useState<
     { [key: string]: string }[]
   >([]);
+
+  const getAllPlayerData = () => {
+    axios
+      .get(`http://localhost:8000/AllPlayerData/`)
+      .then((data) => {
+        setPlayerData(data.data.data);
+        message.success("Filters Cleared!x`");
+      })
+      .catch((err) => console.log(err));
+  };
 
   useEffect(() => {
     setLoadingSearchName(true);
@@ -91,6 +101,7 @@ function FilterTable({ setPlayerData, playerData }: Ifilterprops) {
           onClick={() => {
             setPlayeNameFilter("");
             setShotMadeFilter("");
+            getAllPlayerData();
           }}
           className="ms-5 text-xl"
         />
