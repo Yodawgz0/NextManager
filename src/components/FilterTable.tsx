@@ -71,11 +71,6 @@ function FilterTable({ setPlayerData, playerData }: Ifilterprops) {
   return (
     <>
       <div className="px-11 bg-amber-100 d-flex flex-row">
-        <Search
-          className=" bg-violet-950 mt-3 rounded-lg w-96"
-          placeholder="input search text"
-          enterButton="Search"
-        />
         <Select
           defaultValue="Choose Player Name..."
           onChange={handlePlayerNameChange}
