@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Input, Select, message } from "antd";
+import { Select, message } from "antd";
 import axios from "axios";
 import { DataType } from "@/pages/Dashboard";
 import { ClearOutlined } from "@ant-design/icons";
-const { Search } = Input;
 axios.defaults.withCredentials = true;
 
 interface Ifilterprops {
@@ -52,9 +51,12 @@ function FilterTable({ setPlayerData, playerData }: Ifilterprops) {
       .get(`http://localhost:8000/AllPlayerData/`)
       .then((data) => {
         setPlayerData(data.data.data);
-        message.success("Filters Cleared!x`");
+        message.success("Filters Cleared!`");
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        message.error("Something Went Wrong!");
+        console.log(err);
+      });
   };
 
   useEffect(() => {
