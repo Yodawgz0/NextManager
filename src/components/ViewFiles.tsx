@@ -4,9 +4,11 @@ import {
   EditOutlined,
   StopOutlined,
 } from "@ant-design/icons";
-import { Skeleton, Spin, message } from "antd";
+import { Button, Modal, Skeleton, Spin, message } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import ReactPlayer from "react-player";
+
 axios.defaults.withCredentials = true;
 
 interface fileprops {
@@ -29,6 +31,7 @@ export default function ViewFiles() {
     false,
     "",
   ]);
+  const [previewButton, setPreviewButton] = useState<boolean>(false);
 
   const getAllFiles = () => {
     const tempallfilesdata: fileprops[] = [];
@@ -78,10 +81,7 @@ export default function ViewFiles() {
         responseType: "blob",
       })
       .then((res) =>
-        setLink([
-          URL.createObjectURL(new Blob([res.data], { type: "image/jpeg" })),
-          filename,
-        ])
+        setLink([URL.createObjectURL(new Blob([res.data])), filename])
       )
       .catch((err) => console.log(err));
   };
@@ -107,7 +107,7 @@ export default function ViewFiles() {
                       placeholder={element.filename}
                       onChange={(e) => setRenameSet(e.target.value)}
                     />
-                  ) : ( 
+                  ) : (
                     element.filename
                   )}
                   <p className="ps-1 italic">
@@ -166,6 +166,16 @@ export default function ViewFiles() {
                       Get Link
                     </p>
                   )}
+                  {link[0].length && link[1] === element.filename ? (
+                    <Button
+                      className="ms-4 bottom-1 bg-teal-500 text-cyan-50"
+                      onClick={() => setPreviewButton(true)}
+                    >
+                      Preview
+                    </Button>
+                  ) : (
+                    <></>
+                  )}
                 </div>
                 {spinShow[0] && spinShow[1] === index ? (
                   <Spin className="text-lg" />
@@ -199,6 +209,15 @@ export default function ViewFiles() {
           <></>
         )}
       </div>
+      <Modal
+        centered
+        open={previewButton}
+        onCancel={() => setPreviewButton(false)}
+        footer={null}
+        width={700}
+      >
+        <ReactPlayer controls={true} url={link[0]} />
+      </Modal>
     </>
   );
 }
