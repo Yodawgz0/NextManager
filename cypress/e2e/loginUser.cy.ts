@@ -1,6 +1,6 @@
 import { constants } from "../constant";
 
-describe("Login Page", () => {
+export function login() {
   it("Does the login", () => {
     cy.visit("http://localhost:3000");
     cy.contains("Login").click();
@@ -9,4 +9,4 @@ describe("Login Page", () => {
     cy.get("input[placeholder='Password']").type(constants.password);
     cy.contains("Login").click();
   });
-});
+}
