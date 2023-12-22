@@ -250,20 +250,23 @@ export default function Dashboard() {
       )}
       <div className="bg-slate-950 h-screen flex flex-col items-center justify-center">
         <div className="w-full flex justify-between">
-          <Button
-            type="primary"
-            className="text-green-950 bg-green-200 ms-4 mb-10 w-40 "
-            onClick={() => router.push("/UploadPage")}
-          >
-            Upload Documents
-          </Button>
-          <Button
-            type="primary"
-            className="text-green-950 bg-green-200 ms-4 mb-10 w-40 "
-            onClick={() => router.push("/Chatarea")}
-          >
-            Chat People?
-          </Button>
+          <div className="flex flex-col">
+            <Button
+              type="primary"
+              className="text-green-950 bg-green-200 ms-4 mb-5 w-40 "
+              onClick={() => router.push("/UploadPage")}
+            >
+              Upload Documents
+            </Button>
+            <Button
+              type="primary"
+              className="text-green-950 bg-fuchsia-400 ms-4 mb-10 w-40 "
+              onClick={() => router.push("/Chatarea")}
+            >
+              Chat People?
+            </Button>
+          </div>
+
           <Button
             type="primary"
             className="text-rose-950 bg-rose-200 me-4 mb-10 w-40 "
