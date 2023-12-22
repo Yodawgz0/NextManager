@@ -255,9 +255,15 @@ export default function Dashboard() {
             className="text-green-950 bg-green-200 ms-4 mb-10 w-40 "
             onClick={() => router.push("/UploadPage")}
           >
-            {" "}
             Upload Documents
-          </Button>{" "}
+          </Button>
+          <Button
+            type="primary"
+            className="text-green-950 bg-green-200 ms-4 mb-10 w-40 "
+            onClick={() => router.push("/Chatarea")}
+          >
+            Chat People?
+          </Button>
           <Button
             type="primary"
             className="text-rose-950 bg-rose-200 me-4 mb-10 w-40 "
