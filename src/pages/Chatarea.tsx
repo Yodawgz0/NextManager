@@ -12,13 +12,15 @@ function Chatarea() {
             <div className="bg-[#222e35] text-white text-center py-4">
               Online People
             </div>
-            <div className="">
+            <div className="flex justify-center mt-3">
               <Search
-                placeholder="input search text"
+                placeholder="search chat..."
+                className=" bg-white rounded-lg"
                 allowClear
                 style={{ width: 200 }}
               />
             </div>
+            <hr className="mt-3" />
           </div>
           <div className="text-white font-mono text-3xl text-center flex justify-center flex-col w-full">
             <p>Click on Chat!</p>
