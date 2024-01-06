@@ -1,9 +1,33 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Input } from "antd";
 import { SearchProps } from "antd/es/input/Search";
 const { Search } = Input;
 
-function Chatarea() {
+const Chatarea: React.FC = () => {
+  useEffect(() => {
+    // Replace the URL with the actual WebSocket server URL
+    const socket = new WebSocket("ws://localhost:7000");
+
+    // Connection opened
+    socket.addEventListener("open", (event) => {
+      console.log("WebSocket connection opened", event);
+    });
+
+    // Listen for messages
+    socket.addEventListener("message", (event) => {
+      console.log("Received message:", event.data);
+    });
+
+    // Connection closed
+    socket.addEventListener("close", (event) => {
+      console.log("WebSocket connection closed", event);
+    });
+
+    // Clean up the WebSocket connection when the component unmounts
+    return () => {
+      socket.close();
+    };
+  }, []);
   return (
     <>
       <div className=" h-screen bg-[#0e151b] p-5">
@@ -14,7 +38,7 @@ function Chatarea() {
             </div>
             <div className="flex justify-center mt-3">
               <Search
-                placeholder="search chat..."
+                placeholder="Search Chat..."
                 className=" bg-white rounded-lg"
                 allowClear
                 style={{ width: 200 }}
@@ -29,6 +53,6 @@ function Chatarea() {
       </div>
     </>
   );
-}
+};
 
 export default Chatarea;
