@@ -1,29 +1,27 @@
 import React, { useEffect } from "react";
 import { Input } from "antd";
-import { SearchProps } from "antd/es/input/Search";
+// import { SearchProps } from "antd/es/input/Search";
+import { ArrowLeftOutlined } from "@ant-design/icons";
+import router from "next/router";
 const { Search } = Input;
-
+const socket = new WebSocket("ws://localhost:7000");
 const Chatarea: React.FC = () => {
-  useEffect(() => {
-    // Replace the URL with the actual WebSocket server URL
-    const socket = new WebSocket("ws://localhost:7000");
-
-    // Connection opened
-    socket.addEventListener("open", (event) => {
-      console.log("WebSocket connection opened", event);
+  const onExitChat = () => {
+    router.push("/Dashboard");
+      socket.addEventListener("close", (event) => {
+      console.log("WebSocket connection closed", event);
     });
-
-    // Listen for messages
+    return () => {
+      socket.close();
+    };
+  };
+  useEffect(() => {
+      socket.addEventListener("open", (event) => {
+      console.log("WebSocket connection opened", event);
+    }); 
     socket.addEventListener("message", (event) => {
       console.log("Received message:", event.data);
     });
-
-    // Connection closed
-    socket.addEventListener("close", (event) => {
-      console.log("WebSocket connection closed", event);
-    });
-
-    // Clean up the WebSocket connection when the component unmounts
     return () => {
       socket.close();
     };
