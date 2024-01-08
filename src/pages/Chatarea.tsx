@@ -33,8 +33,16 @@ const Chatarea: React.FC = () => {
       <div className=" h-screen bg-[#0e151b] p-5">
         <div className="flex flex-row h-[99%] bg-[#111b21]">
           <div className="w-1/4 border-r-2 border-gray-600">
-            <div className="bg-[#222e35] text-white text-center py-4">
-              Online People
+            <div className="bg-[#222e35] text-white text-center py-4 flex flex-col">
+              <div className="float-left ml-3">
+                <ArrowLeftOutlined
+                  className="float-left text-lg cursor-pointer"
+                  onClick={() => onExitChat()}
+                />
+              </div>
+              <p className="before:absolute before:content-[''] before:-translate-x-4 before:translate-y-2 before:h-2 before:w-2 before:bg-green-400 before:rounded-full">
+                Online People
+              </p>
             </div>
             <div className="flex justify-center mt-3">
               <Search
