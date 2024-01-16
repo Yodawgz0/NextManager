@@ -46,6 +46,8 @@ export interface DataType {
   PLAYER_NAME: string;
 }
 
+const socket = new WebSocket("ws://localhost:7000");
+
 export default function Dashboard() {
   const [alertText, setAlertText] = useState<string>("");
   const [playerData, setPlayerData] = useState<DataType[]>([]);
@@ -71,6 +73,9 @@ export default function Dashboard() {
     axios
       .get("http://localhost:8000/userSignOut")
       .then((response) => {
+        if (socket && socket.readyState === WebSocket.OPEN) {
+          socket.close();
+        }
         router.push("/LoginPage");
       })
       .catch((error) => {

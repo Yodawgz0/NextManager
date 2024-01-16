@@ -13,12 +13,12 @@ import ViewFiles from "@/components/ViewFiles";
 
 const { Dragger } = Upload;
 axios.defaults.withCredentials = true;
+const socket = new WebSocket("ws://localhost:7000");
 
 export default function UploadPage() {
   const [userName, setUserName] = useState<string>("");
   const [alertText, setAlertText] = useState<string>("");
   const [signOutLoad, setSignOutLoad] = useState<boolean>(false);
-
   const [renderTrigg, setRenderTrigg] = useState<boolean>(false);
   const MemoizedViewFiles = useCallback(() => {
     return <ViewFiles />;
@@ -49,6 +49,9 @@ export default function UploadPage() {
     axios
       .get("http://localhost:8000/userSignOut")
       .then((response) => {
+        if (socket && socket.readyState === WebSocket.OPEN) {
+          socket.close();
+        }
         router.push("/LoginPage");
       })
       .catch((error) => {
