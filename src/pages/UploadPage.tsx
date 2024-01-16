@@ -109,13 +109,11 @@ export default function UploadPage() {
       )}
       <div className="h-screen bg-slate-900 flex flex-col justify-center items-center">
         <div className="w-full flex justify-between">
-          {" "}
           <Button
             type="primary"
             className="text-green-950 bg-red-200 ms-4 mb-20 "
             onClick={() => router.push("/Dashboard")}
           >
-            {" "}
             <SwapLeftOutlined style={{ fontSize: 30 }} /> Back
           </Button>
           <Button
@@ -129,15 +127,13 @@ export default function UploadPage() {
           </Button>
         </div>
         <div className="w-full text-center">
-          {" "}
           <h3 className="mb-10 text-cyan-100 text-3xl ms-4 text-b">
-            Upload your files here!{" "}
+            Upload your files here!
             {userName.length ? userName : <Spin indicator={spinnerIcon} />}
           </h3>
         </div>
         <div className=" w-3/5 p-10 rounded-lg border-solid">
           <div className="bg-violet-300 p-4">
-            {" "}
             <Dragger {...props}>
               <p className="ant-upload-drag-icon">
                 <InboxOutlined />
