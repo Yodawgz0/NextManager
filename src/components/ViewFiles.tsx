@@ -166,7 +166,9 @@ export default function ViewFiles() {
                       Get Link
                     </p>
                   )}
-                  {link[0].length && link[1] === element.filename ? (
+                  {link[0].length &&
+                  link[1] === element.filename &&
+                  element.filename.includes("mp4") ? (
                     <Button
                       className="ms-4 bottom-1 bg-teal-500 text-cyan-50"
                       onClick={() => setPreviewButton(true)}
