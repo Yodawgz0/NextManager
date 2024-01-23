@@ -4,8 +4,9 @@ import { Input } from "antd";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import router from "next/router";
 const { Search } = Input;
-const socket = new WebSocket("ws://localhost:7000");
+
 const Chatarea: React.FC = () => {
+  const socket = new WebSocket("ws://localhost:7000");
   const onExitChat = () => {
     router.push("/Dashboard");
     socket.addEventListener("close", (event) => {
@@ -16,15 +17,10 @@ const Chatarea: React.FC = () => {
     };
   };
   useEffect(() => {
-    socket.addEventListener("open", (event) => {
-      console.log("WebSocket connection opened", event);
-    });
-    socket.addEventListener("message", (event) => {
-      console.log("Received message:", event.data);
-    });
-    return () => {
-      socket.close();
-    };
+    if (socket && socket.readyState === WebSocket.OPEN) {
+      console.log("WebSocket connection is already open");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <div className=" h-screen bg-[#0e151b] p-5">
