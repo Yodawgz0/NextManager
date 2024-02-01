@@ -46,8 +46,6 @@ export interface DataType {
   PLAYER_NAME: string;
 }
 
-const socket = new WebSocket("ws://localhost:7000");
-
 export default function Dashboard() {
   const [alertText, setAlertText] = useState<string>("");
   const [playerData, setPlayerData] = useState<DataType[]>([]);
@@ -73,13 +71,16 @@ export default function Dashboard() {
     axios
       .get("http://localhost:8000/userSignOut")
       .then((response) => {
+        const socket = new WebSocket("ws://localhost:7000");
         if (socket && socket.readyState === WebSocket.OPEN) {
           socket.close();
         }
         router.push("/LoginPage");
       })
       .catch((error) => {
-        setAlertText(error.data.message);
+        try {
+          setAlertText(error.data.message);
+        } catch {}
         setSignOutLoad(false);
       });
   };
@@ -147,6 +148,10 @@ export default function Dashboard() {
       .catch(function (error) {
         setAlertText(error.data.message);
         if (error.data.message == "Unauthorized") {
+          const socket = new WebSocket("ws://localhost:7000");
+          if (socket && socket.readyState === WebSocket.OPEN) {
+            socket.close();
+          }
           router.push("/LoginPage");
         }
       });
@@ -224,6 +229,19 @@ export default function Dashboard() {
 
   useEffect(() => {
     getPlayerData();
+    // Check if the WebSocket connection is open
+    const socket = new WebSocket("ws://localhost:7000");
+    if (socket.readyState === WebSocket.OPEN) {
+      console.log("WebSocket connection is already open.");
+    } else {
+      socket.addEventListener("open", (event) => {
+        console.log("WebSocket connection opened", event);
+      });
+
+      socket.addEventListener("message", (event) => {
+        console.log("Received message:", event.data);
+      });
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
