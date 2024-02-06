@@ -1,4 +1,4 @@
-This project requres backend to deploy and use which can be found on the expressServer Repo
+This project requres backend to deploy and use which can be found on the expressServer Repository 
 
 currently filling in with the cyress file
 
