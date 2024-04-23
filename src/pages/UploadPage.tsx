@@ -13,7 +13,6 @@ import ViewFiles from "@/components/ViewFiles";
 
 const { Dragger } = Upload;
 axios.defaults.withCredentials = true;
-const socket = new WebSocket("ws://localhost:7000");
 
 export default function UploadPage() {
   const [userName, setUserName] = useState<string>("");
@@ -49,6 +48,7 @@ export default function UploadPage() {
     axios
       .get("http://localhost:8000/userSignOut")
       .then((response) => {
+        const socket = new WebSocket("ws://localhost:7000");
         if (socket && socket.readyState === WebSocket.OPEN) {
           socket.close();
         }
