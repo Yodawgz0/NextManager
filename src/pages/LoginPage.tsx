@@ -6,7 +6,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 
 axios.defaults.withCredentials = true;
-
+const socket = new WebSocket("ws://localhost:7000");
 export default function LoginPage() {
   const router = useRouter();
   const [alertText, setAlertText] = useState<string>("");
@@ -25,6 +25,17 @@ export default function LoginPage() {
       .then(function (response) {
         console.log(response);
         if (response.data.message === "Login Successful") {
+          if (socket && socket.readyState === WebSocket.OPEN) {
+            console.log("WebSocket connection is already open");
+          } else {
+            socket.addEventListener("open", (event) => {
+              console.log("WebSocket connection opened", event);
+            });
+            socket.addEventListener("message", (event) => {
+              console.log("Received message:", event.data);
+            });
+          }
+
           router.push("/Dashboard");
         }
       })
