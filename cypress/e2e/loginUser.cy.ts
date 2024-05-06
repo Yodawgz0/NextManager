@@ -3,7 +3,7 @@
 import { constants } from "../constant";
 describe("My First Test", () => {
   it("Does the login", () => {
-    cy.visit("http://localhost:3000");
+    cy.visit(ServerUrl + ":3000");
     cy.contains("Login").click();
     cy.url().should("include", "/LoginPage");
     cy.get("input[placeholder='Email']").type(constants.username);

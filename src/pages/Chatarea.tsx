@@ -1,9 +1,13 @@
 import React, { useEffect } from "react";
 import { Input } from "antd";
+import WebSocket from "ws";
 // import { SearchProps } from "antd/es/input/Search";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import router from "next/router";
 const { Search } = Input;
+import { config } from "dotenv";
+config();
+const ServerUrl = process.env["SERVER_URL"];
 
 const Chatarea: React.FC = () => {
   const socket = new WebSocket("ws://" + ServerUrl + ":7000");

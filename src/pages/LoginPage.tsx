@@ -5,6 +5,7 @@ import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { config } from "dotenv";
+import WebSocket from "ws";
 config();
 
 const ServerUrl = process.env["SERVER_URL"];
