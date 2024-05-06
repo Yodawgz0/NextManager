@@ -4,6 +4,9 @@ import Link from "next/link";
 import { FormOutlined, LockOutlined, UserOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { config } from "dotenv";
+config();
+const ServerUrl = process.env["SERVER_URL"];
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -15,7 +18,7 @@ export default function RegisterPage() {
       password: values.password,
     };
     axios
-      .post("http://localhost:8000/register", {
+      .post(ServerUrl + ":8000/register", {
         userDetails,
       })
       .then(function (response) {

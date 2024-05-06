@@ -4,9 +4,13 @@ import Link from "next/link";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { useRouter } from "next/router";
+import { config } from "dotenv";
+config();
+
+const ServerUrl = process.env["SERVER_URL"];
 
 axios.defaults.withCredentials = true;
-const socket = new WebSocket("ws://localhost:7000");
+const socket = new WebSocket("ws://" + ServerUrl + ":7000");
 export default function LoginPage() {
   const router = useRouter();
   const [alertText, setAlertText] = useState<string>("");
@@ -19,7 +23,7 @@ export default function LoginPage() {
     };
 
     axios
-      .post("http://localhost:8000/login", {
+      .post(ServerUrl + ":8000/login", {
         userDetails,
       })
       .then(function (response) {

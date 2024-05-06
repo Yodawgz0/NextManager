@@ -10,6 +10,9 @@ import axios from "axios";
 import router from "next/router";
 import { spinnerIcon } from "./Dashboard";
 import ViewFiles from "@/components/ViewFiles";
+import { config } from "dotenv";
+config();
+const ServerUrl = process.env["SERVER_URL"];
 
 const { Dragger } = Upload;
 axios.defaults.withCredentials = true;
@@ -25,7 +28,7 @@ export default function UploadPage() {
   }, [renderTrigg]);
   useEffect(() => {
     axios
-      .get(`http://localhost:8000/getUsername`)
+      .get(`${ServerUrl}:8000/getUsername`)
       .then((data) => {
         setUserName(data.data.message);
       })
@@ -46,9 +49,9 @@ export default function UploadPage() {
   const handleSingOut = () => {
     setSignOutLoad(true);
     axios
-      .get("http://localhost:8000/userSignOut")
+      .get(ServerUrl + ":8000/userSignOut")
       .then((response) => {
-        const socket = new WebSocket("ws://localhost:7000");
+        const socket = new WebSocket("ws://" + ServerUrl + ":7000");
         if (socket && socket.readyState === WebSocket.OPEN) {
           socket.close();
         }
@@ -63,7 +66,7 @@ export default function UploadPage() {
   const props: UploadProps = {
     name: "file",
     multiple: true,
-    action: "http://localhost:8000/uploadfile",
+    action: ServerUrl + ":8000/uploadfile",
     withCredentials: true,
     onChange(info) {
       console.log(info);
@@ -84,7 +87,7 @@ export default function UploadPage() {
     },
     onRemove(file) {
       axios
-        .delete(`http://localhost:8000/deleteFile/${file.name}`)
+        .delete(`${ServerUrl}:8000/deleteFile/${file.name}`)
         .then((res) => {
           message.success(`${file.name} ${res.data.message}`);
           setRenderTrigg(!renderTrigg);

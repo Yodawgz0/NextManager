@@ -15,6 +15,10 @@ import EditTable from "@/components/EditTable";
 import { ObjectId } from "bson";
 import router from "next/router";
 import FilterTable from "@/components/FilterTable";
+import { config } from "dotenv";
+config();
+
+const ServerUrl = process.env["SERVER_URL"];
 
 axios.defaults.withCredentials = true;
 export const spinnerIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
@@ -69,9 +73,9 @@ export default function Dashboard() {
   const handleSingOut = () => {
     setSignOutLoad(true);
     axios
-      .get("http://localhost:8000/userSignOut")
+      .get(ServerUrl + ":8000/userSignOut")
       .then((response) => {
-        const socket = new WebSocket("ws://localhost:7000");
+        const socket = new WebSocket("ws://" + ServerUrl + ":7000");
         if (socket && socket.readyState === WebSocket.OPEN) {
           socket.close();
         }
@@ -96,7 +100,7 @@ export default function Dashboard() {
       PLAYER_NAME: values.PlayerName,
     };
     axios
-      .post("http://localhost:8000/playerData", {
+      .post(ServerUrl + ":8000/playerData", {
         userDetails,
       })
       .then(function (response) {
@@ -139,7 +143,7 @@ export default function Dashboard() {
     setDeletingSpinner(true);
     axios
       .delete(
-        `http://localhost:8000/deletePlayerData/${record.CLOSEST_DEFENDER}&${record.PLAYER_NAME}&${record._id}`
+        `${ServerUrl}:8000/deletePlayerData/${record.CLOSEST_DEFENDER}&${record.PLAYER_NAME}&${record._id}`
       )
       .then(function (response) {
         setAlertText(response.data.message);
@@ -148,7 +152,7 @@ export default function Dashboard() {
       .catch(function (error) {
         setAlertText(error.data.message);
         if (error.data.message == "Unauthorized") {
-          const socket = new WebSocket("ws://localhost:7000");
+          const socket = new WebSocket("ws://" + ServerUrl + ":7000");
           if (socket && socket.readyState === WebSocket.OPEN) {
             socket.close();
           }
@@ -187,7 +191,7 @@ export default function Dashboard() {
   const getPlayerData = () => {
     setTableLoading(true);
     axios
-      .get(`http://localhost:8000/AllPlayerData/`)
+      .get(`${ServerUrl}:8000/AllPlayerData/`)
       .then((data) => {
         setPlayerData(data.data.data);
         setTableLoading(false);
@@ -209,7 +213,7 @@ export default function Dashboard() {
 
   const getUserData = () => {
     axios
-      .get(`http://localhost:8000/getUsername`)
+      .get(`${ServerUrl}:8000/getUsername`)
       .then((data) => {
         setUserName(data.data.message);
       })
@@ -230,7 +234,7 @@ export default function Dashboard() {
   useEffect(() => {
     getPlayerData();
     // Check if the WebSocket connection is open
-    const socket = new WebSocket("ws://localhost:7000");
+    const socket = new WebSocket("ws://" + ServerUrl + ":7000");
     if (socket.readyState === WebSocket.OPEN) {
       console.log("WebSocket connection is already open.");
     } else {

@@ -6,7 +6,7 @@ import router from "next/router";
 const { Search } = Input;
 
 const Chatarea: React.FC = () => {
-  const socket = new WebSocket("ws://localhost:7000");
+  const socket = new WebSocket("ws://" + ServerUrl + ":7000");
   const onExitChat = () => {
     router.push("/Dashboard");
     socket.addEventListener("close", (event) => {
