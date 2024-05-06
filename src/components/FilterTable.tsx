@@ -3,6 +3,11 @@ import { Select, message } from "antd";
 import axios from "axios";
 import { DataType } from "@/pages/Dashboard";
 import { ClearOutlined } from "@ant-design/icons";
+import { config } from "dotenv";
+config();
+
+const ServerUrl = process.env["SERVER_URL"];
+
 axios.defaults.withCredentials = true;
 
 interface Ifilterprops {
@@ -19,7 +24,7 @@ function FilterTable({ setPlayerData, playerData }: Ifilterprops) {
     setPlayeNameFilter(value);
     axios
       .get(
-        `http://localhost:8000/playerDataFilter/${
+        `${ServerUrl}:8000/playerDataFilter/${
           shotMadeFilter
             ? `PLAYERNAME:${value}&SHOTRESULT:${shotMadeFilter}`
             : `PLAYERNAME:${value}&SHOTRESULT:`
@@ -33,7 +38,7 @@ function FilterTable({ setPlayerData, playerData }: Ifilterprops) {
     setShotMadeFilter(value);
     axios
       .get(
-        `http://localhost:8000/playerDataFilter/${
+        `${ServerUrl}:8000/playerDataFilter/${
           playeNameFilter
             ? `PLAYERNAME:${playeNameFilter}&SHOTRESULT:${value}`
             : `PLAYERNAME:&SHOTRESULT:${value}`
@@ -48,7 +53,7 @@ function FilterTable({ setPlayerData, playerData }: Ifilterprops) {
 
   const getAllPlayerData = () => {
     axios
-      .get(`http://localhost:8000/AllPlayerData/`)
+      .get(`${ServerUrl}:8000/AllPlayerData/`)
       .then((data) => {
         setPlayerData(data.data.data);
         message.success("Filters Cleared!`");
@@ -62,7 +67,7 @@ function FilterTable({ setPlayerData, playerData }: Ifilterprops) {
   useEffect(() => {
     setLoadingSearchName(true);
     axios
-      .get("http://localhost:8000/playerDataFilter/getplayernames")
+      .get(ServerUrl + ":8000/playerDataFilter/getplayernames")
       .then((res) => {
         setPlayerNamesUniq(res.data.data[0].names);
         setLoadingSearchName(false);

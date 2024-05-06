@@ -8,6 +8,10 @@ import { Button, Modal, Skeleton, Spin, message } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import ReactPlayer from "react-player";
+import { config } from "dotenv";
+config();
+
+const ServerUrl = process.env["SERVER_URL"];
 
 axios.defaults.withCredentials = true;
 
@@ -36,7 +40,7 @@ export default function ViewFiles() {
   const getAllFiles = () => {
     const tempallfilesdata: fileprops[] = [];
     axios
-      .get("http://localhost:8000/getUploadedFiles")
+      .get(ServerUrl + ":8000/getUploadedFiles")
       .then((res) => {
         if (res.data.length) {
           res.data.forEach((e: fileprops) => {
@@ -54,7 +58,7 @@ export default function ViewFiles() {
   const deleteFileHandler = (file: fileprops, index: number) => {
     setSpinShow([true, index]);
     axios
-      .delete(`http://localhost:8000/deleteFile/${file.filename}`)
+      .delete(`${ServerUrl}:8000/deleteFile/${file.filename}`)
       .then((res) => {
         message.success(`${file.filename} ${res.data.message}`);
         getAllFiles();
@@ -67,7 +71,7 @@ export default function ViewFiles() {
   const handleRenameInput = (renameFilename: string, IDFile: String) => {
     setRenameFlag([false, ""]);
     axios
-      .patch(`http://localhost:8000/renamefile/${IDFile}&${renameFilename}`)
+      .patch(`${ServerUrl}:8000/renamefile/${IDFile}&${renameFilename}`)
       .then((res) => {
         getAllFiles();
       })
@@ -77,7 +81,7 @@ export default function ViewFiles() {
   const getFileDownloadLink = (filename: string) => {
     setLinkFetchFlag([true, filename]);
     axios
-      .get(`http://localhost:8000/getFile/${filename}`, {
+      .get(`${ServerUrl}:8000/getFile/${filename}`, {
         responseType: "blob",
       })
       .then((res) =>

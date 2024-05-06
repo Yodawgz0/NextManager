@@ -4,6 +4,10 @@ import { Dispatch, SetStateAction } from "react";
 import { DataType } from "@/pages/Dashboard";
 import { FormOutlined, NumberOutlined, UserOutlined } from "@ant-design/icons";
 import axios from "axios";
+import { config } from "dotenv";
+config();
+
+const ServerUrl = process.env["SERVER_URL"];
 
 interface modalprops {
   openModal: boolean;
@@ -44,7 +48,7 @@ const EditTable = ({
             };
           });
         axios
-          .patch(`http://localhost:8000/editPlayer/${dataPlayerEdit._id}`, {
+          .patch(`${ServerUrl}:8000/editPlayer/${dataPlayerEdit._id}`, {
             userDetails,
           })
           .then(function (response) {
